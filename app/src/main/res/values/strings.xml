@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Dominos Pizza</string>
+    <string name="title_activity_loggin">Loggin Dominos Pizza</string>
+    <string name="title_activity_registro">Registro Dominos Pizza</string>
+    <string name="title_activity_splash">Dominos Pizza</string>
+    <string name="title_activity_perfil">PerfilActivity</string>
+    <string name="Usuario">Usuario</string>
+    <string name="Contraseña">Contraseña</string>
+    <string name="ConfirmarContraseña">Confirmar Contraseña</string>
+    <string name="Entrar">Entrar</string>
+    <string name="Registro">Registro</string>
+    <string name="email">Correo Electronico</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="mi_perfil">Mi perfil</string>
+    <string name="mMainActivity">Pagina principal</string>
+</resources>
