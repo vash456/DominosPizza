@@ -3,5 +3,11 @@
     <item
         android:id="@+id/mMainActivity"
         android:title="@string/mMainActivity"
+        android:orderInCategory="1"
+        />
+    <item
+        android:id="@+id/mProductosActivity"
+        android:title="@string/mProductos"
+        android:orderInCategory="2"
         />
 </menu>

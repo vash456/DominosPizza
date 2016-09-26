@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/mMiperfil"
-        android:title="@string/mi_perfil"
+        android:id="@+id/mMainActivity"
+        android:title="@string/mMainActivity"
         android:orderInCategory="1"
         />
     <item
-        android:id="@+id/mProductosActivity"
-        android:title="@string/mProductos"
+        android:id="@+id/mMiperfil"
+        android:title="@string/mi_perfil"
         android:orderInCategory="2"
         />
 

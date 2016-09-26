@@ -45,6 +45,12 @@ public class PerfilActivity extends AppCompatActivity {
                 intent.putExtra("email",email);
                 startActivity(intent);
                 break;
+            case R.id.mProductosActivity:
+                Intent intent2 = new Intent(this, ProductosActivity.class);
+                intent2.putExtra("usuario",name);
+                intent2.putExtra("email",email);
+                startActivity(intent2);
+                break;
 
         }
         return super.onOptionsItemSelected(item);

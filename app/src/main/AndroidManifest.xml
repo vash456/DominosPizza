@@ -5,21 +5,19 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:logo="@drawable/dominos_pizza_logo"
         android:label="@string/app_name"
+        android:logo="@drawable/dominos_pizza_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".LogginActivity"
-            android:label="@string/title_activity_loggin">
-        </activity>
+            android:label="@string/title_activity_loggin"></activity>
         <activity
             android:name=".RegistroActivity"
-            android:label="@string/title_activity_registro"></activity>
+            android:label="@string/title_activity_registro" />
         <activity
             android:name=".SplashActivity"
             android:label="@string/title_activity_splash">
@@ -31,7 +29,8 @@
         </activity>
         <activity
             android:name=".PerfilActivity"
-            android:label="@string/title_activity_perfil"></activity>
+            android:label="@string/title_activity_perfil" />
+        <activity android:name=".ProductosActivity"></activity>
     </application>
 
 </manifest>
