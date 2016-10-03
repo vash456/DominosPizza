@@ -2,6 +2,7 @@ package com.estrada.darlin.appdominospizza;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,12 +20,46 @@ public class LogginActivity extends AppCompatActivity implements View.OnClickLis
     private String user;
     private String password;
     private String email;
+    private String sesion;
     private boolean flag = false;
+
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loggin);
+
+        Bundle extras;
+
+        extras = getIntent().getExtras();
+
+        ////////////////prefencias compartidas/////////////////
+
+        prefs = getPreferences(MODE_PRIVATE);
+        editor = prefs.edit();
+
+        refreshPrefs();
+        if (extras != null) {
+            sesion = extras.getString("sesion");
+            Toast.makeText(this, "Sesiòn "+sesion,Toast.LENGTH_SHORT).show();
+            editor.putString("var_sesion",sesion);
+            editor.commit();
+            flag = true;
+        }
+        if (sesion.equals("abierta")) {
+            Intent intent3 = new Intent(this, MainActivity.class);
+            intent3.putExtra("usuario", user);
+            intent3.putExtra("password", password);
+            intent3.putExtra("email", email);
+            startActivity(intent3);
+            finish();
+        }else if (sesion.equals("cerrada")){
+            flag = true;
+        }
+
+        ////////////////////////////////////////
 
         b_registro = (Button) findViewById(R.id.b_registro);
         b_entrar = (Button) findViewById(R.id.b_entrar);
@@ -71,8 +106,11 @@ public class LogginActivity extends AppCompatActivity implements View.OnClickLis
                     }
                     if (user.equals(et_usuario.getText().toString())){
                         if (password.equals(et_password.getText().toString())){
+                            sesion = "abierta";
+                            savePrefs();
                             Intent intent2 = new Intent(this, MainActivity.class);
                             intent2.putExtra("usuario", user);
+                            intent2.putExtra("password", password);
                             intent2.putExtra("email", email);
                             startActivity(intent2);
                             finish();//2
@@ -112,5 +150,23 @@ public class LogginActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void savePrefs(){
+        editor.putString("var_name",user);
+        editor.putString("var_pass",password);
+        editor.putString("var_email",email);
+        editor.putString("var_sesion",sesion);
+        editor.commit();
+    }
+    public void refreshPrefs(){
+        user = String.valueOf(prefs.getString("var_name","Nombre no definido"));
+        password = String.valueOf(prefs.getString("var_pass","contraseña no definida"));
+        email = String.valueOf(prefs.getString("var_email","Email no definido"));
+        sesion = String.valueOf(prefs.getString("var_sesion","sesion no definida"));
+    }
+    public void clearPrefs(){
+        editor.clear();
+        editor.commit();
     }
 }

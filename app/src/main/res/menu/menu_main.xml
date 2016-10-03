@@ -10,5 +10,10 @@
         android:title="@string/mProductos"
         android:orderInCategory="2"
         />
+    <item
+        android:id="@+id/mCerrarSesion"
+        android:title="@string/mCerrarSesion"
+        android:orderInCategory="3"
+        />
 
 </menu>

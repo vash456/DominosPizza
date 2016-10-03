@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo_azul"
+    tools:context="com.estrada.darlin.appdominospizza.ofer_navDrawerActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:id="@+id/iImagen_promo"
+            android:src="@drawable/promo1_2x1"
+            android:layout_gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="NA"
+                android:id="@+id/tNom_promo"
+                android:textColor="@color/white"
+                android:gravity="center"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="NA"
+                android:id="@+id/tDesc_promo"
+                android:textColor="@color/white"
+                android:gravity="center"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <android.support.v4.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/contenedorPrincipal_4"
+        tools:context="com.estrada.darlin.appdominospizza.ofer_navDrawerActivity">
+
+        <ListView
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:id="@+id/menuIzq_4"
+            android:choiceMode="singleChoice"
+            android:foregroundGravity="left"
+            android:layout_gravity="start">
+        </ListView>
+    </android.support.v4.widget.DrawerLayout>
+
+</RelativeLayout>
