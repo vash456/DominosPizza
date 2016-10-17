@@ -25,7 +25,7 @@ public class ProductosActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private String name, password, email;
 
-    private String[] opciones = new String[] {"Pàgina principal", "Mi perfil", "Cerrar Sesion"};
+    private String[] opciones = new String[] {"Pagina principal", "Mi perfil", "Cerrar Sesion"};
     private DrawerLayout drawerLayout;
     private ListView listView;
     private ActionBarDrawerToggle drawerToggle;

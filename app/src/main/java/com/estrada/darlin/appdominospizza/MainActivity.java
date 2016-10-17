@@ -37,11 +37,11 @@ public class MainActivity extends AppCompatActivity {
     private String[] opciones = new String[] {"Mi perfil", "Nuestro Menu", "Cerrar Sesion"};
     private DrawerLayout drawerLayout;
     private ListView listView;
-    private ListView listView2;
+    ListView listView2;
     private ActionBarDrawerToggle drawerToggle;
 
     private Promociones[] datos = new Promociones[]{
-            new Promociones(R.drawable.promo1_2x1,"2x1","Participan pizzas de masa original, " +
+            new Promociones(R.drawable.promo1_2x1,"Pizzas 2x1","Participan pizzas de masa original, " +
                     "orilla rellena de queso y crunchy.\nValida solo por el fin de semana."),
             new Promociones(R.drawable.promo2_arequipe_rolls,"Gratis Arequipe Rolls","Haz tu " +
                     "pedido desde nuestra app y por la compra de una pizza grande te damos " +
@@ -60,33 +60,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Toast.makeText(this,"onCreate",Toast.LENGTH_LONG).show();
-
-        Adapter adaptador = new Adapter(this, datos);
-
-        listView2 = (ListView) findViewById(R.id.listview);
-
-
-        listView2.setAdapter(adaptador);
-
-        listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(MainActivity.this, ofer_navDrawerActivity.class);
-
-                idpromo = datos[i].getIdImagen();
-                nom_promo = datos[i].getNombre();
-                desc_promo = datos[i].getDescripcion();
-
-                intent.putExtra("idpromo",idpromo);
-                intent.putExtra("nom_promo",nom_promo);
-                intent.putExtra("desc_promo", desc_promo);
-                intent.putExtra("usuario",name);
-                intent.putExtra("password", password);
-                intent.putExtra("email",email);
-                startActivity(intent);
-                finish();
-            }
-        });
 
         /////////////////mandar datos////////////////////
 
@@ -151,11 +124,38 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout.setDrawerListener(drawerToggle);
 
+        Adapter adaptador = new Adapter(this, datos);
+
+        listView2 = (ListView) findViewById(R.id.listview);
+
+
+        listView2.setAdapter(adaptador);
+
+        listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(MainActivity.this, ofer_navDrawerActivity.class);
+
+                idpromo = datos[i].getIdImagen();
+                nom_promo = datos[i].getNombre();
+                desc_promo = datos[i].getDescripcion();
+
+                intent.putExtra("idpromo",idpromo);
+                intent.putExtra("nom_promo",nom_promo);
+                intent.putExtra("desc_promo", desc_promo);
+                intent.putExtra("usuario",name);
+                intent.putExtra("password", password);
+                intent.putExtra("email",email);
+                startActivity(intent);
+                finish();
+            }
+        });
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()){
             case R.id.mMiperfil:
                 Intent intent = new Intent(this, PerfilActivity.class);
@@ -207,7 +207,8 @@ public class MainActivity extends AppCompatActivity {
             TextView nombre = (TextView) item.findViewById(R.id.tNombre);
             nombre.setText(datos[position].getNombre());
             TextView descripcion = (TextView) item.findViewById(R.id.tDescripcion);
-            descripcion.setText(datos[position].getDescripcion());
+            //descripcion.setText(datos[position].getDescripcion());
+            descripcion.setText("Click para mas informacion.");
 
             return (item);
         }

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class ofer_navDrawerActivity extends AppCompatActivity {
     private String nom_promo,desc_promo;
 
     private String name, password, email;
-    private String[] opciones = new String[] {"Pàgina principal","Mi perfil", "Nuestro Menu", "Cerrar Sesion"};
+    private String[] opciones = new String[] {"Pagina principal","Mi perfil", "Nuestro Menu", "Cerrar Sesion"};
     private DrawerLayout drawerLayout;
     private ListView listView;
     private ActionBarDrawerToggle drawerToggle;
@@ -125,6 +126,27 @@ public class ofer_navDrawerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.mMainActivity:
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("usuario",name);
+                intent.putExtra("password",password);
+                intent.putExtra("email",email);
+                startActivity(intent);
+                break;
+            case R.id.mMiperfil:
+                Intent intent2 = new Intent(this, PerfilActivity.class);
+                intent2.putExtra("usuario",name);
+                intent2.putExtra("password",password);
+                intent2.putExtra("email",email);
+                startActivity(intent2);
+                break;
+            case R.id.mProductosActivity:
+                Intent intent3 = new Intent(this, ProductosActivity.class);
+                intent3.putExtra("usuario",name);
+                intent3.putExtra("password", password);
+                intent3.putExtra("email",email);
+                startActivity(intent3);
+                break;
             case android.R.id.home:
                 drawerLayout.openDrawer(Gravity.LEFT);
                 return true;
@@ -133,5 +155,9 @@ public class ofer_navDrawerActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_promos, menu);
+        return true;
+    }
 }
