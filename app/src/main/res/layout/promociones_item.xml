@@ -13,6 +13,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
         android:orientation="vertical">
 
         <TextView
@@ -21,7 +22,7 @@
             android:textSize="15sp"
             android:text="NA"
             android:id="@+id/tNombre"
-            android:textColor="@color/white"/>
+            android:textColor="@color/khaki"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

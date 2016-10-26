@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<color name="rojoletradominos">#db012d</color>
 	<color name="colorfondodominos">#0d577b</color>
 	<color name="barradominos">#027cad</color>
 	<color name="colorPrimary">#3F51B5</color>

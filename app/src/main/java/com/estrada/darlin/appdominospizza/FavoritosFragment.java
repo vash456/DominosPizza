@@ -4,6 +4,7 @@ package com.estrada.darlin.appdominospizza;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,6 +16,7 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -23,39 +25,32 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PizzasFragment extends ListFragment implements AdapterView.OnItemClickListener {
+public class FavoritosFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
-    /*Productos[] datos= new Productos[]{
-            new Productos(R.drawable.pizza_colombiana,"Pizzas 2x1","Participan pizzas de masa original, " +
-                    "orilla rellena de queso y crunchy.\nValida solo por el fin de semana.","1000000",1),
-            new Productos(R.drawable.hawaiana,"Gratis Arequipe Rolls","Haz tu " +
-                    "pedido desde nuestra app y por la compra de una pizza grande te damos " +
-                    "arequipe rolls gratis.","100",2),
-            new Productos(R.drawable.fiesta_pepperoni,"Descuento de 50 porciento",
-                    "Pide una pizza grande masa original de 1 a 9 ingredientes y llevate la " +
-                            "segunda al 50% de descuento.","100",3),
-            new Productos(R.drawable.honolulu,"Pizza de sartèn a 159$","Pide Pizza " +
-                    "de sarten de 2 a 4 ingredientes a tan solo 159$.\nPromo valida solo por " +
-                    "internet y app","100",4),
-            new Productos(R.drawable.vegetariana,"Pizza de sartèn a 189$","Pizza " +
-                    "de sarten de 1 ingredientes màs papotas y canelazo bites a tan solo 189$","100",5)};
-*/
-    Productos[] datos = new Productos[6];
+    Productos[] datos;
+
     DominosSQLiteHelper tablasDominos;
     SQLiteDatabase dbDominos;
     Cursor c;
     SharedPreferences prefs;
 
+    int position1;
+
+    Adapter adaptador;
+
     private String name;
-    private int idFavorito,idUsuario,idProductos;
+    private int idUsuario, idFavorito, countProFav = 0;
 
+    TextView t_fav;
 
-
-    public PizzasFragment() {
+    public FavoritosFragment() {
         // Required empty public constructor
     }
 
@@ -64,42 +59,67 @@ public class PizzasFragment extends ListFragment implements AdapterView.OnItemCl
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        //View v = inflater.inflate(R.layout.fragment_favoritos, container, false);
+
         prefs = this.getActivity().getSharedPreferences("preferencia", Context.MODE_PRIVATE);
         name = String.valueOf(prefs.getString("var_name","Nombre no definido"));
 
         tablasDominos = new DominosSQLiteHelper(getContext(), "DominosBD", null, 1);
         dbDominos = tablasDominos.getWritableDatabase();
 
+        //t_fav = (TextView) v.findViewById(R.id.t_Fav);
 
-        idProductos = 100;
+        c = dbDominos.rawQuery("SELECT * FROM DatosUsuarios WHERE nombre='"
+                +name+"'",null);
+        if(c.moveToFirst()){
+            idUsuario = c.getInt(0);
+        }
 
-        for(int i=0;i<6;i++) {
-            c = dbDominos.rawQuery("SELECT * FROM TablaProductos WHERE id='"+(idProductos+i)+"'",null);
+        c = dbDominos.query("TablaFavoritos",null,"idUsuario='"+idUsuario+"'",null,null,null,null);
+
+        ArrayList<Integer> arrayListIdsProductos = new ArrayList<Integer>();
+
+        while(c.moveToNext()) {
+            //t_fav.append(c.getString(0) + "|"+c.getString(1) + "|"+c.getString(2)
+            //        +"|"+c.getString(3)+"|"+c.getString(4)+"\n");
+            //t_fav.append(c.getString(0) + "|"+c.getString(1) + "|"+c.getString(2)+"\n");
+
+            arrayListIdsProductos.add(c.getInt(2));
+            countProFav++;
+        }
+
+        Collections.sort(arrayListIdsProductos);//ordena de menor a mayor los elementos del array
+
+        //int[] idsProductos = new int[countProFav];
+        datos = new Productos[countProFav];
+
+        /*c = dbDominos.query("TablaFavoritos",null,"idUsuario='"+idUsuario+"'",null,null,null,null);
+
+        int count=0;
+        while(c.moveToNext()) {
+            idsProductos[count] = c.getInt(2);
+            count++;
+        }*/
+
+        for(int i=0;i<countProFav;i++) {
+            c = dbDominos.rawQuery("SELECT * FROM TablaProductos WHERE id='"+arrayListIdsProductos.get(i)+"'",null);
             if (c.moveToFirst()){
                 datos[i] = new Productos(c.getInt(1),c.getString(2),c.getString(3),c.getString(4),c.getInt(0));
             }
 
         }
 
-        /*c = dbDominos.query("TablaPizzas",null,null,null,null,null,null);
-        //c.moveToFirst();
-        int i=0;
-        while(c.moveToNext()) {
 
-            datos[i] = new Productos(c.getInt(1),c.getString(2),c.getString(3),c.getString(4),c.getInt(0));
-            i++;
 
-        }*/
-
-        //Toast.makeText(getActivity(), "cuenta filas = "+c.getCount(), Toast.LENGTH_SHORT).show();
-
-        Adapter adaptador = new Adapter(getContext(), datos);
+        adaptador = new Adapter(getContext(), datos);
 
         setListAdapter(adaptador);
 
+        //return v;
         return super.onCreateView(inflater,container,savedInstanceState);
-
     }
+
+
 
     public void onStart(){
         super.onStart();
@@ -114,9 +134,10 @@ public class PizzasFragment extends ListFragment implements AdapterView.OnItemCl
         /*switch (position){
             case 0:
                 Toast.makeText(getActivity(), "Item: " + position, Toast.LENGTH_SHORT).show();
+                createAndShowAlertDialog();
                 break;
             case 1:
-                createAndShowAlertDialog();
+                //createAndShowAlertDialog();
                 break;
             default:
                 Toast.makeText(getActivity(), "Item: " + position, Toast.LENGTH_SHORT).show();
@@ -176,12 +197,15 @@ public class PizzasFragment extends ListFragment implements AdapterView.OnItemCl
                         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.favoritos_buttom_off);
                         botonfavorito.setImageBitmap(bmp);
                         dbDominos.delete("TablaFavoritos","idFavorito='"+idFavorito+"'",null);
+                        adaptador.notifyDataSetChanged();
+                        //Toast.makeText(getActivity(), "Eliminado de Favoritos", Toast.LENGTH_SHORT).show();
+                        //createAndShowAlertDialog();
                     }else {
                         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.favoritos_buttom_on);
                         botonfavorito.setImageBitmap(bmp);
                         dbDominos.execSQL("INSERT INTO TablaFavoritos VALUES(null, '"+idUsuario+
                                 "', '"+datos[position].getIdProducto()+"')");
-                        Toast.makeText(getActivity(), "Agregado a Favoritos", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), "Agregado a Favoritos", Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -192,20 +216,25 @@ public class PizzasFragment extends ListFragment implements AdapterView.OnItemCl
 
             return (item);
         }
+
     }
 
     private void createAndShowAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("My Title");
-        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        builder.setTitle("¿Desea eliminar de favoritos?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Toast.makeText(getActivity(), "ok", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Eliminado de favoritos", Toast.LENGTH_SHORT).show();
+                //Object toRemove = adaptador.getItemViewType(position1);
+                //Intent intent = new Intent(getContext(), PerfilActivity.class);
+                //intent.putExtra("tabFlag",true);
+                //startActivity(intent);
                 dialog.dismiss();
             }
         });
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Toast.makeText(getActivity(), "cancelar", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "cancelar", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });

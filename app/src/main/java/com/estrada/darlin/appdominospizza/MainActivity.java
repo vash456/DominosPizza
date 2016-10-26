@@ -1,8 +1,10 @@
 package com.estrada.darlin.appdominospizza;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -30,11 +32,17 @@ import com.estrada.darlin.appdominospizza.R;
 
 public class MainActivity extends AppCompatActivity {
 
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+
+    DominosSQLiteHelper usuarios;
+    SQLiteDatabase dbUsuarios;
+
     private int idpromo;
     private String nom_promo,desc_promo;
 
-    private String name, password, email;
-    private String[] opciones = new String[] {"Mi perfil", "Nuestro Menu", "Cerrar Sesion"};
+    private String name, password, email, tablas;
+    private String[] opciones = new String[] {"Pagina principal","Mi perfil", "Nuestro Menu", "Cerrar Sesion"};
     private DrawerLayout drawerLayout;
     private ListView listView;
     ListView listView2;
@@ -59,16 +67,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        usuarios = new DominosSQLiteHelper(this, "DominosBD", null, 1);
+        dbUsuarios = usuarios.getWritableDatabase();
+
+        prefs = getSharedPreferences("preferencia", Context.MODE_PRIVATE);
+        editor = prefs.edit();
+        tablas = String.valueOf(prefs.getString("var_tablas","valor no definido"));
+
+        if (tablas.equals("valor no definido")){
+            llenarTablaProductos(dbUsuarios);
+            //llenarTablaPizzas(dbUsuarios);
+            //llenarTablaEntrantes(dbUsuarios);
+            //llenarTablaPostres(dbUsuarios);
+            //llenarTablaBebidas(dbUsuarios);
+            tablas = "lleno";
+            editor.putString("var_tablas",tablas);
+            editor.commit();
+        }
+
         //Toast.makeText(this,"onCreate",Toast.LENGTH_LONG).show();
 
         /////////////////mandar datos////////////////////
 
-        Bundle extras = getIntent().getExtras();
+        /*Bundle extras = getIntent().getExtras();
 
         name = extras.getString("usuario");
         password = extras.getString("password");
         email = extras.getString("email");
-
+        */
         /////////////////////navigation Drawer///////////////////////////
 
         ActionBar actionBar = getSupportActionBar();
@@ -89,28 +116,36 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (i){
                     case(0):
-                        Intent intent = new Intent(MainActivity.this, PerfilActivity.class);
-                        intent.putExtra("usuario",name);
-                        intent.putExtra("password", password);
-                        intent.putExtra("email",email);
-                        startActivity(intent);
-                        finish();
+                        //Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                        //intent.putExtra("usuario",name);
+                        //intent.putExtra("password", password);
+                        //intent.putExtra("email",email);
+                        //startActivity(intent);
+                        //finish();
                         break;
                     case(1):
-                        Intent intent2 = new Intent(MainActivity.this, ProductosActivity.class);
-                        intent2.putExtra("usuario",name);
-                        intent2.putExtra("password", password);
-                        intent2.putExtra("email",email);
+                        Intent intent2 = new Intent(MainActivity.this, PerfilActivity.class);
+                        //intent2.putExtra("usuario",name);
+                        //intent2.putExtra("password", password);
+                        //intent2.putExtra("email",email);
                         startActivity(intent2);
                         finish();
                         break;
                     case(2):
-                        Intent intent3 = new Intent(MainActivity.this, LogginActivity.class);
-                        intent3.putExtra("usuario",name);
-                        intent3.putExtra("password", password);
-                        intent3.putExtra("email",email);
-                        intent3.putExtra("sesion","cerrada");
+                        Intent intent3 = new Intent(MainActivity.this, ProductosActivity.class);
+                        //intent3.putExtra("usuario",name);
+                        //intent3.putExtra("password", password);
+                        //intent3.putExtra("email",email);
                         startActivity(intent3);
+                        finish();
+                        break;
+                    case(3):
+                        Intent intent4 = new Intent(MainActivity.this, LogginActivity.class);
+                        //intent4.putExtra("usuario",name);
+                        //intent4.putExtra("password", password);
+                        //intent4.putExtra("email",email);
+                        intent4.putExtra("sesion","cerrada");
+                        startActivity(intent4);
                         finish();
                         break;
                 }
@@ -143,9 +178,9 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("idpromo",idpromo);
                 intent.putExtra("nom_promo",nom_promo);
                 intent.putExtra("desc_promo", desc_promo);
-                intent.putExtra("usuario",name);
-                intent.putExtra("password", password);
-                intent.putExtra("email",email);
+                //intent.putExtra("usuario",name);
+                //intent.putExtra("password", password);
+               // intent.putExtra("email",email);
                 startActivity(intent);
                 finish();
             }
@@ -159,23 +194,23 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.mMiperfil:
                 Intent intent = new Intent(this, PerfilActivity.class);
-                intent.putExtra("usuario",name);
-                intent.putExtra("password", password);
-                intent.putExtra("email",email);
+                //intent.putExtra("usuario",name);
+                //intent.putExtra("password", password);
+                //intent.putExtra("email",email);
                 startActivity(intent);
                 break;
             case R.id.mProductosActivity:
                 Intent intent2 = new Intent(this, ProductosActivity.class);
-                intent2.putExtra("usuario",name);
-                intent2.putExtra("password", password);
-                intent2.putExtra("email",email);
+                //intent2.putExtra("usuario",name);
+                //intent2.putExtra("password", password);
+                //intent2.putExtra("email",email);
                 startActivity(intent2);
                 break;
             case R.id.mCerrarSesion:
                 Intent intent3 = new Intent(this, LogginActivity.class);
-                intent3.putExtra("usuario",name);
-                intent3.putExtra("password", password);
-                intent3.putExtra("email",email);
+                //intent3.putExtra("usuario",name);
+                //intent3.putExtra("password", password);
+                //intent3.putExtra("email",email);
                 intent3.putExtra("sesion","cerrada");
                 startActivity(intent3);
                 finish();
@@ -242,4 +277,355 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 */
+public void llenarTablaPizzas(SQLiteDatabase sqLiteDatabase) {
+
+    ContentValues values = new ContentValues();
+
+    values.put("idImagen",R.drawable.pizza_colombiana);
+    values.put("producto","Pizza Colombiana");
+    values.put("descripcion","Cebolla, maíz tierno, tocineta y chorizo.");
+    values.put("precio","10000");
+    sqLiteDatabase.insert("TablaPizzas",null,values);
+
+    values.put("idImagen",R.drawable.hawaiana);
+    values.put("producto","Pizza Hawaiana");
+    values.put("descripcion","Extraqueso , Jamón y Piña.");
+    values.put("precio","10000");
+    sqLiteDatabase.insert("TablaPizzas",null,values);
+
+    values.put("idImagen",R.drawable.fiesta_pepperoni);
+    values.put("producto","Fiesta Pepperoni");
+    values.put("descripcion","Doble pepperoni y extraqueso.");
+    values.put("precio","10000");
+    sqLiteDatabase.insert("TablaPizzas",null,values);
+
+    values.put("idImagen",R.drawable.honolulu);
+    values.put("producto","Pizza Honolulu");
+    values.put("descripcion","Jalapeño, jamón, tocineta y piña.");
+    values.put("precio","10000");
+    sqLiteDatabase.insert("TablaPizzas",null,values);
+
+    values.put("idImagen",R.drawable.vegetariana);
+    values.put("producto","Pizza Vegetariana");
+    values.put("descripcion","Cebolla, pimentón, champiñón y tomate.");
+    values.put("precio","10000");
+    sqLiteDatabase.insert("TablaPizzas",null,values);
+
+    values.put("idImagen",R.drawable.bbq);
+    values.put("producto","Pizza BBQ");
+    values.put("descripcion","Carne molida, tocineta, maíz tierno, salsa BBQ y cebolla.");
+    values.put("precio","10000");
+    sqLiteDatabase.insert("TablaPizzas",null,values);
+
+}
+
+    public void llenarTablaEntrantes(SQLiteDatabase sqLiteDatabase) {
+
+        ContentValues values = new ContentValues();
+
+        values.put("idImagen",R.drawable.canela_baitz);
+        values.put("producto","Canela Baitz");
+        values.put("descripcion","Deliciosos panecillos dulces hechos con la receta única de Domino's, espolvoreados con canela y acompañados de Arequipe.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaEntrantes",null,values);
+
+        values.put("idImagen",R.drawable.palitos_queso);
+        values.put("producto","Palitos de queso");
+        values.put("descripcion","Exquisitas barritas de pan cubiertas con queso mozarella gratinado y acompañados de Arequipe.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaEntrantes",null,values);
+
+        values.put("idImagen",R.drawable.arequipe_rolls);
+        values.put("producto","Arequipe Rolls");
+        values.put("descripcion","Exquisitos rollos recién horneados, rellenos de arequipe y glaseados con el toque Domino's");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaEntrantes",null,values);
+
+        values.put("idImagen",R.drawable.combo_pollo);
+        values.put("producto","Combo Pollo");
+        values.put("descripcion","Strippers, Kickers y Alitas");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaEntrantes",null,values);
+
+        values.put("idImagen",R.drawable.patatas_grill);
+        values.put("producto","Patatas grill");
+        values.put("descripcion","Crujientes patatas horneadas acompañadas de una salsa a elegir.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaEntrantes",null,values);
+
+        values.put("idImagen",R.drawable.ensaladas_pasta_marisco);
+        values.put("producto","Ensalas pastos y mariscos");
+        values.put("descripcion","Ensalada Mediterránea de pasta al dente con zanahorias, maiz, guisantes, calamares y gambas.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaEntrantes",null,values);
+
+    }
+    public void llenarTablaPostres(SQLiteDatabase sqLiteDatabase) {
+
+        ContentValues values = new ContentValues();
+
+        values.put("idImagen",R.drawable.brownie_duo);
+        values.put("producto","Brownie Duo");
+        values.put("descripcion","Dos raciones de Brownie de chocolate.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaPostres",null,values);
+
+        values.put("idImagen",R.drawable.cookies);
+        values.put("producto","Cookies");
+        values.put("descripcion","Cookies con pepitas de chocolate.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaPostres",null,values);
+
+        values.put("idImagen",R.drawable.helado_caramel_chew_chew);
+        values.put("producto","Helado de caramelo Chew Chew");
+        values.put("descripcion","Crema con salsa y trozos de caramelo al cacao. De 150ml o 500ml");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaPostres",null,values);
+
+        values.put("idImagen",R.drawable.helado_chocolate);
+        values.put("producto","Helado de chocolate Chew Chew");
+        values.put("descripcion","Chocolate con trozos de Brownie. De 150ml o 500ml");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaPostres",null,values);
+
+        values.put("idImagen",R.drawable.trufas);
+        values.put("producto","Trufas");
+        values.put("descripcion","Trufas");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaPostres",null,values);
+
+        values.put("idImagen",R.drawable.vulcano_plato);
+        values.put("producto","Vulcano de chocolate");
+        values.put("descripcion","Delicioso bizcocho de chocolate relleno de chocolate fundido.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaPostres",null,values);
+
+    }
+
+    public void llenarTablaBebidas(SQLiteDatabase sqLiteDatabase) {
+
+        ContentValues values = new ContentValues();
+
+        values.put("idImagen",R.drawable.pepsi);
+        values.put("producto","Pepsi");
+        values.put("descripcion","El auténtico sabor de la bebida Pepsi®, una refrescante manera de compartir los mejores momentos.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaBebidas",null,values);
+
+        values.put("idImagen",R.drawable.colombiana);
+        values.put("producto","Colombiana");
+        values.put("descripcion","Colombiana");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaBebidas",null,values);
+
+        values.put("idImagen",R.drawable.seven_up);
+        values.put("producto","7UP");
+        values.put("descripcion","7UP");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaBebidas",null,values);
+
+        values.put("idImagen",R.drawable.manzana);
+        values.put("producto","Manzana Postobon");
+        values.put("descripcion","Manzana Postobon");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaBebidas",null,values);
+
+        values.put("idImagen",R.drawable.club_colombia);
+        values.put("producto","Club Colombia Dorada");
+        values.put("descripcion","Prohíbese el expendio de bebidas embriagantes a menores de " +
+                "edad Ley 124 de 1994. El exceso de alcohol es perjudicial para la salud Ley 30 de 1986.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaBebidas",null,values);
+
+        values.put("idImagen",R.drawable.cerveza_aguila);
+        values.put("producto","Cerveza Aguila");
+        values.put("descripcion","Prohíbese el expendio de bebidas embriagantes a menores de " +
+                "edad Ley 124 de 1994. El exceso de alcohol es perjudicial para la salud Ley 30 de 1986.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaBebidas",null,values);
+
+    }
+    public void llenarTablaProductos(SQLiteDatabase sqLiteDatabase) {
+
+        ContentValues values = new ContentValues();
+        int i=100;//Pizzas
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.pizza_colombiana);
+        values.put("producto","Pizza Colombiana");
+        values.put("descripcion","Cebolla, maíz tierno, tocineta y chorizo.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.hawaiana);
+        values.put("producto","Pizza Hawaiana");
+        values.put("descripcion","Extraqueso , Jamón y Piña.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.fiesta_pepperoni);
+        values.put("producto","Fiesta Pepperoni");
+        values.put("descripcion","Doble pepperoni y extraqueso.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.honolulu);
+        values.put("producto","Pizza Honolulu");
+        values.put("descripcion","Jalapeño, jamón, tocineta y piña.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.vegetariana);
+        values.put("producto","Pizza Vegetariana");
+        values.put("descripcion","Cebolla, pimentón, champiñón y tomate.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.bbq);
+        values.put("producto","Pizza BBQ");
+        values.put("descripcion","Carne molida, tocineta, maíz tierno, salsa BBQ y cebolla.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        i=200;//Entrantes
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.canela_baitz);
+        values.put("producto","Canela Baitz");
+        values.put("descripcion","Deliciosos panecillos dulces hechos con la receta única de Domino's, espolvoreados con canela y acompañados de Arequipe.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.palitos_queso);
+        values.put("producto","Palitos de queso");
+        values.put("descripcion","Exquisitas barritas de pan cubiertas con queso mozarella gratinado y acompañados de Arequipe.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.arequipe_rolls);
+        values.put("producto","Arequipe Rolls");
+        values.put("descripcion","Exquisitos rollos recién horneados, rellenos de arequipe y glaseados con el toque Domino's");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.combo_pollo);
+        values.put("producto","Combo Pollo");
+        values.put("descripcion","Strippers, Kickers y Alitas");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.patatas_grill);
+        values.put("producto","Patatas grill");
+        values.put("descripcion","Crujientes patatas horneadas acompañadas de una salsa a elegir.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.ensaladas_pasta_marisco);
+        values.put("producto","Ensalas pastos y mariscos");
+        values.put("descripcion","Ensalada Mediterránea de pasta al dente con zanahorias, maiz, guisantes, calamares y gambas.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        i=300;//Postres
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.brownie_duo);
+        values.put("producto","Brownie Duo");
+        values.put("descripcion","Dos raciones de Brownie de chocolate.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.cookies);
+        values.put("producto","Cookies");
+        values.put("descripcion","Cookies con pepitas de chocolate.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.helado_caramel_chew_chew);
+        values.put("producto","Helado de caramelo Chew Chew");
+        values.put("descripcion","Crema con salsa y trozos de caramelo al cacao. De 150ml o 500ml");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.helado_chocolate);
+        values.put("producto","Helado de chocolate Chew Chew");
+        values.put("descripcion","Chocolate con trozos de Brownie. De 150ml o 500ml");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.trufas);
+        values.put("producto","Trufas");
+        values.put("descripcion","Trufas");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.vulcano_plato);
+        values.put("producto","Vulcano de chocolate");
+        values.put("descripcion","Delicioso bizcocho de chocolate relleno de chocolate fundido.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        i=400;//Bebidas
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.pepsi);
+        values.put("producto","Pepsi");
+        values.put("descripcion","El auténtico sabor de la bebida Pepsi®, una refrescante manera de compartir los mejores momentos.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.colombiana);
+        values.put("producto","Colombiana");
+        values.put("descripcion","Colombiana");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.seven_up);
+        values.put("producto","7UP");
+        values.put("descripcion","7UP");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.manzana);
+        values.put("producto","Manzana Postobon");
+        values.put("descripcion","Manzana Postobon");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.club_colombia);
+        values.put("producto","Club Colombia Dorada");
+        values.put("descripcion","Prohíbese el expendio de bebidas embriagantes a menores de " +
+                "edad Ley 124 de 1994. El exceso de alcohol es perjudicial para la salud Ley 30 de 1986.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+        values.put("id",i++);
+        values.put("idImagen",R.drawable.cerveza_aguila);
+        values.put("producto","Cerveza Aguila");
+        values.put("descripcion","Prohíbese el expendio de bebidas embriagantes a menores de " +
+                "edad Ley 124 de 1994. El exceso de alcohol es perjudicial para la salud Ley 30 de 1986.");
+        values.put("precio","10000");
+        sqLiteDatabase.insert("TablaProductos",null,values);
+
+    }
+
 }

@@ -42,9 +42,9 @@ public class ofer_navDrawerActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
 
-        name = extras.getString("usuario");
-        password = extras.getString("password");
-        email = extras.getString("email");
+        //name = extras.getString("usuario");
+        //password = extras.getString("password");
+        //email = extras.getString("email");
 
         idpromo = extras.getInt("idpromo");
         nom_promo = extras.getString("nom_promo");
@@ -79,33 +79,33 @@ public class ofer_navDrawerActivity extends AppCompatActivity {
                 switch (i){
                     case(0):
                         Intent intent = new Intent(ofer_navDrawerActivity.this, MainActivity.class);
-                        intent.putExtra("usuario",name);
-                        intent.putExtra("password", password);
-                        intent.putExtra("email",email);
+                        //intent.putExtra("usuario",name);
+                        //intent.putExtra("password", password);
+                        //intent.putExtra("email",email);
                         startActivity(intent);
                         finish();
                         break;
                     case(1):
                         Intent intent2 = new Intent(ofer_navDrawerActivity.this, PerfilActivity.class);
-                        intent2.putExtra("usuario",name);
-                        intent2.putExtra("password", password);
-                        intent2.putExtra("email",email);
+                        //intent2.putExtra("usuario",name);
+                        //intent2.putExtra("password", password);
+                        //intent2.putExtra("email",email);
                         startActivity(intent2);
                         finish();
                         break;
                     case(2):
                         Intent intent3 = new Intent(ofer_navDrawerActivity.this, ProductosActivity.class);
-                        intent3.putExtra("usuario",name);
-                        intent3.putExtra("password", password);
-                        intent3.putExtra("email",email);
+                        //intent3.putExtra("usuario",name);
+                        //intent3.putExtra("password", password);
+                        //intent3.putExtra("email",email);
                         startActivity(intent3);
                         finish();
                         break;
                     case(3):
                         Intent intent4 = new Intent(ofer_navDrawerActivity.this, LogginActivity.class);
-                        intent4.putExtra("usuario",name);
-                        intent4.putExtra("password", password);
-                        intent4.putExtra("email",email);
+                        //intent4.putExtra("usuario",name);
+                        //intent4.putExtra("password", password);
+                        //intent4.putExtra("email",email);
                         intent4.putExtra("sesion","cerrada");
                         startActivity(intent4);
                         finish();
@@ -128,23 +128,23 @@ public class ofer_navDrawerActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.mMainActivity:
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra("usuario",name);
-                intent.putExtra("password",password);
-                intent.putExtra("email",email);
+                //intent.putExtra("usuario",name);
+                //intent.putExtra("password",password);
+                //intent.putExtra("email",email);
                 startActivity(intent);
                 break;
             case R.id.mMiperfil:
                 Intent intent2 = new Intent(this, PerfilActivity.class);
-                intent2.putExtra("usuario",name);
-                intent2.putExtra("password",password);
-                intent2.putExtra("email",email);
+                //intent2.putExtra("usuario",name);
+                //intent2.putExtra("password",password);
+                //intent2.putExtra("email",email);
                 startActivity(intent2);
                 break;
             case R.id.mProductosActivity:
                 Intent intent3 = new Intent(this, ProductosActivity.class);
-                intent3.putExtra("usuario",name);
-                intent3.putExtra("password", password);
-                intent3.putExtra("email",email);
+                //intent3.putExtra("usuario",name);
+                //intent3.putExtra("password", password);
+                //intent3.putExtra("email",email);
                 startActivity(intent3);
                 break;
             case android.R.id.home:
